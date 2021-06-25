@@ -11,11 +11,33 @@ app.set('view engine', 'ejs');
 
 app.use(express.static(path.join(__dirname, '/public/')));
 
+const accountData = fs.readFileSync('./src/json/accounts.json');
+const accounts = JSON.parse(accountData);
+
+const usertData = fs.readFileSync('./src/json/users.json');
+const users = JSON.parse(usertData);
+
 app.get('/', function(req, res) {
-  //res.sendFile(path.join(__dirname, '/views/', 'index.html'));
   res.render('index', 
              { 
-              title: 'Index'
+              title: 'Account Summary',
+              accounts: accounts
+             }
+  );
+});
+
+app.get('/savings', function(req, res) {
+  res.render('account', 
+             { 
+              account: accounts.savings
+             }
+  );
+});
+
+app.get('/profile', function(req, res) {
+  res.render('profile', 
+             { 
+              user: users[0]
              }
   );
 });
@@ -23,4 +45,5 @@ app.get('/', function(req, res) {
 app.listen(port, function(){
   // debug('listerning on port ${chalk.green('3000')}');
   console.log('PS Project Running on port ' + port);
+  console.log(users);
 });
